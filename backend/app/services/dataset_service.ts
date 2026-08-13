@@ -5,11 +5,17 @@ import { parseDatasetFile, ParsedRow } from './parser_service';
 import { validateDataset } from './validation_service';
 import { DatasetMetadata, ColumnProfile, DatasetPreviewResponse, DataQualityReport } from '../../../src/types';
 
-const UPLOADS_DIR = path.join(process.cwd(), 'uploads');
+const UPLOADS_DIR = process.env.VERCEL || fs.existsSync('/tmp')
+  ? path.join('/tmp', 'uploads')
+  : path.join(process.cwd(), 'uploads');
 
 function ensureUploadsDirExists() {
   if (!fs.existsSync(UPLOADS_DIR)) {
-    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    try {
+      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    } catch (e) {
+      console.error('Failed to create UPLOADS_DIR:', e);
+    }
   }
 }
 

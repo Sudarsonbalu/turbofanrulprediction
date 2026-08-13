@@ -8,7 +8,9 @@ import { trainRandomForest, predictRandomForest, RandomForestModel } from './mod
 import { calculateMetrics } from './evaluate';
 import { ModelComparisonResult, ModelMetrics, TrainModelParams, FeatureImportanceItem } from '../../../src/types';
 
-const MODELS_DIR = path.join(process.cwd(), 'models');
+const MODELS_DIR = process.env.VERCEL || fs.existsSync('/tmp')
+  ? path.join('/tmp', 'models')
+  : path.join(process.cwd(), 'models');
 
 export interface TrainingPipelineOutput {
   datasetId: string;

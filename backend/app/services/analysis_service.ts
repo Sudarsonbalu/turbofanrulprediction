@@ -5,7 +5,9 @@ import { cleanRows, computeSensorStatistics, computeCorrelationMatrix } from '..
 import { SensorStats, CorrelationMatrixResponse, EngineDetailResponse } from '../../../src/types';
 import { getDatasetFolder, getDatasetMetadata } from './dataset_service';
 
-const PROCESSED_DIR = path.join(process.cwd(), 'processed');
+const PROCESSED_DIR = process.env.VERCEL || fs.existsSync('/tmp')
+  ? path.join('/tmp', 'processed')
+  : path.join(process.cwd(), 'processed');
 
 export interface FullAnalysisResult {
   dataset_id: string;

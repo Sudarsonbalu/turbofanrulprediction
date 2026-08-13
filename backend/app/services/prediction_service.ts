@@ -17,7 +17,9 @@ import {
   ModelComparisonResult
 } from '../../../src/types';
 
-const PROCESSED_DIR = path.join(process.cwd(), 'processed');
+const PROCESSED_DIR = process.env.VERCEL || fs.existsSync('/tmp')
+  ? path.join('/tmp', 'processed')
+  : path.join(process.cwd(), 'processed');
 const MODELS_DIR = path.join(process.cwd(), 'models');
 
 function ensureProcessedDir(datasetId: string) {
