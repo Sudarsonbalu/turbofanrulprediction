@@ -1,11 +1,10 @@
 import { parseDatasetFile, ParsedRow } from '../../backend/app/services/parser_service';
 import { validateDataset } from '../../backend/app/services/validation_service';
 import { cleanRows, computeSensorStatistics, computeCorrelationMatrix } from '../../backend/app/ml/preprocessing';
-import { runTrainingPipeline } from '../../backend/app/ml/train';
 import { extractTestLastCycles, generateTrainingRUL } from '../../backend/app/ml/rul_generator';
-import { engineerFeatures, transformScaler } from '../../backend/app/ml/feature_engineering';
-import { predictLinearRegression, LinearRegressionModel } from '../../backend/app/ml/models/linear_regression';
-import { predictRandomForest, RandomForestModel } from '../../backend/app/ml/models/random_forest';
+import { engineerFeatures, fitScaler, transformScaler } from '../../backend/app/ml/feature_engineering';
+import { trainLinearRegression, predictLinearRegression, LinearRegressionModel } from '../../backend/app/ml/models/linear_regression';
+import { trainRandomForest, predictRandomForest, RandomForestModel } from '../../backend/app/ml/models/random_forest';
 import { calculateMetrics } from '../../backend/app/ml/evaluate';
 import {
   DatasetMetadata,
@@ -264,13 +263,95 @@ export function getClientEngineDetail(datasetId: string, engineId: number): Engi
   };
 }
 
+function trainClientModelInMemory(rows: ParsedRow[], params?: TrainModelParams) {
+  const rowsWithRUL = generateTrainingRUL(rows);
+  const uniqueEngines = Array.from(new Set(rowsWithRUL.map(r => Number(r.engine_id)))).sort((a, b) => a - b);
+
+  const trainEngineCount = Math.max(1, Math.floor(uniqueEngines.length * 0.8));
+  const trainEngines = new Set(uniqueEngines.slice(0, trainEngineCount));
+
+  const trainRows = rowsWithRUL.filter(r => trainEngines.has(Number(r.engine_id)));
+  const valRows = rowsWithRUL.filter(r => !trainEngines.has(Number(r.engine_id)));
+  const evalRows = valRows.length > 0 ? valRows : trainRows;
+
+  const trainFeatures = engineerFeatures(trainRows, 'rul', 5);
+  const valFeatures = engineerFeatures(evalRows, 'rul', 5);
+
+  const scaler = fitScaler(trainFeatures.X, trainFeatures.featureNames);
+  const X_train_scaled = transformScaler(trainFeatures.X, scaler);
+  const X_val_scaled = transformScaler(valFeatures.X, scaler);
+
+  const lrLambda = params?.lr_lambda !== undefined ? params.lr_lambda : 0.1;
+  const lrResult = trainLinearRegression(X_train_scaled, trainFeatures.y, trainFeatures.featureNames, lrLambda);
+  const lrValPreds = predictLinearRegression(lrResult.model, X_val_scaled);
+  const lrMetrics = calculateMetrics(valFeatures.y, lrValPreds, lrResult.trainingTimeMs);
+
+  const rfNEstimators = params?.rf_n_estimators !== undefined ? params.rf_n_estimators : 15;
+  const rfMaxDepth = params?.rf_max_depth !== undefined ? params.rf_max_depth : 8;
+  const rfMinSplit = params?.rf_min_samples_split !== undefined ? params.rf_min_samples_split : 5;
+
+  const rfResult = trainRandomForest(
+    X_train_scaled,
+    trainFeatures.y,
+    trainFeatures.featureNames,
+    rfNEstimators,
+    rfMaxDepth,
+    rfMinSplit
+  );
+  const rfValPreds = predictRandomForest(rfResult.model, X_val_scaled);
+  const rfMetrics = calculateMetrics(valFeatures.y, rfValPreds, rfResult.trainingTimeMs);
+
+  let bestModelName = 'Linear Regression';
+  let bestModelObj: LinearRegressionModel | RandomForestModel = lrResult.model;
+  let isLrBest = true;
+
+  if (rfMetrics.mae < lrMetrics.mae) {
+    bestModelName = 'Random Forest';
+    bestModelObj = rfResult.model;
+    isLrBest = false;
+  }
+
+  const selectionReason = `Selected '${bestModelName}' based on lower validation MAE (${isLrBest ? lrMetrics.mae : rfMetrics.mae} vs ${isLrBest ? rfMetrics.mae : lrMetrics.mae} cycles).`;
+
+  const modelComparisons: ModelComparisonResult[] = [
+    {
+      model_name: 'Linear Regression',
+      metrics: lrMetrics,
+      is_best: isLrBest,
+      selection_reason: isLrBest ? selectionReason : undefined
+    },
+    {
+      model_name: 'Random Forest',
+      metrics: rfMetrics,
+      is_best: !isLrBest,
+      selection_reason: !isLrBest ? selectionReason : undefined
+    }
+  ];
+
+  let featureImportances: FeatureImportanceItem[] = [];
+  if (rfResult.model.featureImportances && rfResult.model.featureImportances.length > 0) {
+    featureImportances = rfResult.model.featureImportances;
+  } else {
+    featureImportances = trainFeatures.featureNames.map(f => ({ feature: f, importance: 1 / trainFeatures.featureNames.length }));
+  }
+
+  return {
+    bestModelName,
+    bestModelObj,
+    selectionReason,
+    scalerParams: scaler,
+    modelComparisons,
+    featureImportances
+  };
+}
+
 export function runClientPrediction(datasetId: string, params?: TrainModelParams): PredictionResultsResponse {
   if (clientPredictionCache.has(datasetId)) {
     return clientPredictionCache.get(datasetId)!.response;
   }
 
   const rows = getClientRows(datasetId);
-  const trainOutput = runTrainingPipeline(datasetId, rows, params);
+  const trainOutput = trainClientModelInMemory(rows, params);
 
   const lastCycleMap = extractTestLastCycles(rows);
   const testEngineIds: number[] = [];

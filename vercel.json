@@ -8,6 +8,10 @@
     {
       "source": "/google14a3ff345c9b5db9.html",
       "destination": "/api/index.ts"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
