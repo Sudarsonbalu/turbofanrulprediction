@@ -1,9 +1,31 @@
 import { parseDatasetFile, ParsedRow } from '../../backend/app/services/parser_service';
 import { validateDataset } from '../../backend/app/services/validation_service';
-import { DatasetMetadata, ColumnProfile, DatasetPreviewResponse, DataQualityReport } from '../types';
+import { cleanRows, computeSensorStatistics, computeCorrelationMatrix } from '../../backend/app/ml/preprocessing';
+import { runTrainingPipeline } from '../../backend/app/ml/train';
+import { extractTestLastCycles, generateTrainingRUL } from '../../backend/app/ml/rul_generator';
+import { engineerFeatures, transformScaler } from '../../backend/app/ml/feature_engineering';
+import { predictLinearRegression, LinearRegressionModel } from '../../backend/app/ml/models/linear_regression';
+import { predictRandomForest, RandomForestModel } from '../../backend/app/ml/models/random_forest';
+import { calculateMetrics } from '../../backend/app/ml/evaluate';
+import {
+  DatasetMetadata,
+  ColumnProfile,
+  DatasetPreviewResponse,
+  EngineDetailResponse,
+  PredictionResultsResponse,
+  EnginePredictionResult,
+  RiskLevel,
+  RiskThresholds,
+  TrainModelParams,
+  ModelComparisonResult,
+  FeatureImportanceItem
+} from '../types';
+import { FullAnalysisResult } from '../../backend/app/services/analysis_service';
 
 // In-memory client dataset store fallback
 const clientDatasets: Map<string, { metadata: DatasetMetadata; rows: ParsedRow[] }> = new Map();
+const clientAnalysisCache: Map<string, FullAnalysisResult> = new Map();
+const clientPredictionCache: Map<string, { response: PredictionResultsResponse; comparisons: ModelComparisonResult[] }> = new Map();
 
 export function generateClientSampleDataset(): DatasetMetadata {
   const lines: string[] = [];
@@ -127,14 +149,19 @@ export function processClientDatasetUpload(fileText: string, originalFilename: s
   return metadata;
 }
 
-export function getClientDatasetMetadata(datasetId: string): DatasetMetadata | null {
+export function getClientDatasetMetadata(datasetId: string): DatasetMetadata {
   const found = clientDatasets.get(datasetId);
-  return found ? found.metadata : null;
+  if (found) return found.metadata;
+  return generateClientSampleDataset();
 }
 
-export function getClientDatasetPreview(datasetId: string, limit: number = 20): DatasetPreviewResponse | null {
-  const found = clientDatasets.get(datasetId);
-  if (!found) return null;
+export function getClientDatasetPreview(datasetId: string, limit: number = 20): DatasetPreviewResponse {
+  let found = clientDatasets.get(datasetId);
+  if (!found) {
+    const meta = generateClientSampleDataset();
+    found = clientDatasets.get(meta.dataset_id)!;
+  }
+
   const previewRows = found.rows.slice(0, limit);
   return {
     dataset_id: found.metadata.dataset_id,
@@ -144,4 +171,224 @@ export function getClientDatasetPreview(datasetId: string, limit: number = 20): 
     columns: found.metadata.column_names,
     rows: previewRows
   };
+}
+
+export function getClientRows(datasetId: string): ParsedRow[] {
+  const found = clientDatasets.get(datasetId);
+  if (found && found.rows.length > 0) return found.rows;
+  const meta = generateClientSampleDataset();
+  const sampleFound = clientDatasets.get(meta.dataset_id);
+  return sampleFound ? sampleFound.rows : [];
+}
+
+export function computeClientDatasetAnalysis(datasetId: string): FullAnalysisResult {
+  if (clientAnalysisCache.has(datasetId)) {
+    return clientAnalysisCache.get(datasetId)!;
+  }
+
+  const rows = getClientRows(datasetId);
+  const cleaned = cleanRows(rows);
+
+  const enginesSet = new Set<number>();
+  let maxCycle = 0;
+  for (const r of cleaned) {
+    enginesSet.add(Number(r['engine_id']));
+    const c = Number(r['cycle']);
+    if (c > maxCycle) maxCycle = c;
+  }
+
+  const sensorCols = Object.keys(cleaned[0] || {}).filter(k => k.toLowerCase().includes('sensor'));
+  const sensorsStats = computeSensorStatistics(cleaned, sensorCols);
+  const correlation = computeCorrelationMatrix(cleaned, sensorCols);
+
+  const result: FullAnalysisResult = {
+    dataset_id: datasetId,
+    processed_at: new Date().toISOString(),
+    summary: {
+      total_rows: cleaned.length,
+      total_engines: enginesSet.size,
+      total_cycles: maxCycle,
+      sensor_count: sensorCols.length
+    },
+    sensors_stats: sensorsStats,
+    correlation
+  };
+
+  clientAnalysisCache.set(datasetId, result);
+  return result;
+}
+
+export function getClientEngineDetail(datasetId: string, engineId: number): EngineDetailResponse {
+  const rawRows = getClientRows(datasetId);
+  const engineRows = rawRows
+    .filter(r => Number(r['engine_id']) === Number(engineId))
+    .sort((a, b) => Number(a['cycle']) - Number(b['cycle']));
+
+  const sampleRows = engineRows.length > 0 ? engineRows : rawRows.filter(r => Number(r['engine_id']) === 1);
+  const sensorCols = Object.keys(sampleRows[0] || {}).filter(k => k.toLowerCase().includes('sensor'));
+
+  const startRow = sampleRows[0] || {};
+  const lastRow = sampleRows[sampleRows.length - 1] || {};
+
+  const initialValues: Record<string, number> = {};
+  const finalValues: Record<string, number> = {};
+  const pctChanges: Record<string, number> = {};
+
+  for (const sensor of sensorCols) {
+    const initV = Number(startRow[sensor]) || 0;
+    const finalV = Number(lastRow[sensor]) || 0;
+    initialValues[sensor] = Number(initV.toFixed(4));
+    finalValues[sensor] = Number(finalV.toFixed(4));
+
+    if (Math.abs(initV) > 1e-6) {
+      const pct = ((finalV - initV) / Math.abs(initV)) * 100;
+      pctChanges[sensor] = Number(pct.toFixed(2));
+    } else {
+      pctChanges[sensor] = 0;
+    }
+  }
+
+  return {
+    dataset_id: datasetId,
+    engine_id: engineId,
+    total_cycles: sampleRows.length,
+    sensors_available: sensorCols,
+    cycles: sampleRows as Record<string, number | null>[],
+    degradation_summary: {
+      start_cycle: Number(startRow['cycle'] || 1),
+      last_cycle: Number(lastRow['cycle'] || sampleRows.length),
+      initial_values: initialValues,
+      final_values: finalValues,
+      pct_changes: pctChanges
+    }
+  };
+}
+
+export function runClientPrediction(datasetId: string, params?: TrainModelParams): PredictionResultsResponse {
+  if (clientPredictionCache.has(datasetId)) {
+    return clientPredictionCache.get(datasetId)!.response;
+  }
+
+  const rows = getClientRows(datasetId);
+  const trainOutput = runTrainingPipeline(datasetId, rows, params);
+
+  const lastCycleMap = extractTestLastCycles(rows);
+  const testEngineIds: number[] = [];
+  const testLastCycles: number[] = [];
+
+  for (const [engId, info] of lastCycleMap.entries()) {
+    testEngineIds.push(engId);
+    testLastCycles.push(info.last_cycle);
+  }
+
+  const fullRowsWithRUL = generateTrainingRUL(rows);
+  const fullFeatures = engineerFeatures(fullRowsWithRUL, 'rul', 5);
+  const X_scaled = transformScaler(fullFeatures.X, trainOutput.scalerParams);
+
+  const lastCycleXScaled: number[][] = [];
+  const lastCycleActualRuls: number[] = [];
+
+  for (let i = 0; i < fullFeatures.engineIds.length; i++) {
+    const engId = fullFeatures.engineIds[i];
+    const cycle = fullFeatures.cycles[i];
+    const lastCycle = lastCycleMap.get(engId)?.last_cycle;
+
+    if (cycle === lastCycle) {
+      lastCycleXScaled.push(X_scaled[i]);
+      lastCycleActualRuls.push(fullFeatures.y[i]);
+    }
+  }
+
+  let predictionsRaw: number[] = [];
+  if (trainOutput.bestModelName === 'Random Forest') {
+    predictionsRaw = predictRandomForest(trainOutput.bestModelObj as RandomForestModel, lastCycleXScaled);
+  } else {
+    predictionsRaw = predictLinearRegression(trainOutput.bestModelObj as LinearRegressionModel, lastCycleXScaled);
+  }
+
+  const metrics = calculateMetrics(lastCycleActualRuls, predictionsRaw, 0);
+
+  const criticalThreshold = params?.critical_threshold !== undefined ? params.critical_threshold : 30;
+  const warningThreshold = params?.warning_threshold !== undefined ? params.warning_threshold : 70;
+  const thresholds: RiskThresholds = {
+    critical_threshold: criticalThreshold,
+    warning_threshold: warningThreshold
+  };
+
+  let criticalCount = 0;
+  let warningCount = 0;
+  let healthyCount = 0;
+  let predRulSum = 0;
+  let minPredRul = Infinity;
+
+  const enginePredictions: EnginePredictionResult[] = [];
+
+  for (let i = 0; i < testEngineIds.length; i++) {
+    const engId = testEngineIds[i];
+    const cycle = testLastCycles[i];
+    const predRul = Math.max(0, Math.round(predictionsRaw[i] || 0));
+    const actualRul = lastCycleActualRuls[i];
+    const absErr = actualRul !== undefined ? Math.abs(predRul - actualRul) : undefined;
+
+    predRulSum += predRul;
+    if (predRul < minPredRul) minPredRul = predRul;
+
+    let risk: RiskLevel = 'HEALTHY';
+    if (predRul <= criticalThreshold) {
+      risk = 'CRITICAL';
+      criticalCount++;
+    } else if (predRul <= warningThreshold) {
+      risk = 'WARNING';
+      warningCount++;
+    } else {
+      healthyCount++;
+    }
+
+    enginePredictions.push({
+      engine_id: engId,
+      current_cycle: cycle,
+      predicted_rul: predRul,
+      actual_rul: actualRul,
+      absolute_error: absErr,
+      risk_level: risk
+    });
+  }
+
+  enginePredictions.sort((a, b) => a.predicted_rul - b.predicted_rul);
+  const avgPredRul = testEngineIds.length > 0 ? Math.round(predRulSum / testEngineIds.length) : 0;
+
+  const response: PredictionResultsResponse = {
+    dataset_id: datasetId,
+    model_used: trainOutput.bestModelName,
+    selection_reason: trainOutput.selectionReason,
+    metrics: metrics,
+    thresholds,
+    summary: {
+      total_engines: testEngineIds.length,
+      avg_predicted_rul: avgPredRul,
+      min_predicted_rul: minPredRul === Infinity ? 0 : minPredRul,
+      critical_count: criticalCount,
+      warning_count: warningCount,
+      healthy_count: healthyCount
+    },
+    predictions: enginePredictions,
+    feature_importance: trainOutput.featureImportances
+  };
+
+  clientPredictionCache.set(datasetId, { response, comparisons: trainOutput.modelComparisons });
+  return response;
+}
+
+export function getClientModelComparison(datasetId: string): ModelComparisonResult[] {
+  if (!clientPredictionCache.has(datasetId)) {
+    runClientPrediction(datasetId);
+  }
+  return clientPredictionCache.get(datasetId)?.comparisons || [];
+}
+
+export function getClientFeatureImportance(datasetId: string): FeatureImportanceItem[] {
+  if (!clientPredictionCache.has(datasetId)) {
+    runClientPrediction(datasetId);
+  }
+  return clientPredictionCache.get(datasetId)?.response.feature_importance || [];
 }

@@ -121,31 +121,35 @@ export function runTrainingPipeline(
   }
 
   // 7. Save trained model artifacts under models/<dataset_id>/
-  const datasetModelDir = path.join(MODELS_DIR, datasetId);
-  if (!fs.existsSync(datasetModelDir)) {
-    fs.mkdirSync(datasetModelDir, { recursive: true });
-  }
-
-  fs.writeFileSync(path.join(datasetModelDir, 'scaler.json'), JSON.stringify(scaler, null, 2));
-  fs.writeFileSync(path.join(datasetModelDir, 'linear_regression.json'), JSON.stringify(lrResult.model, null, 2));
-  fs.writeFileSync(path.join(datasetModelDir, 'random_forest.json'), JSON.stringify(rfResult.model, null, 2));
-
-  const modelMetadata = {
-    dataset_id: datasetId,
-    trained_at: new Date().toISOString(),
-    best_model_name: bestModelName,
-    selection_reason: selectionReason,
-    comparisons: modelComparisons,
-    feature_importances: featureImportances,
-    hyperparameters: {
-      lr_lambda: lrLambda,
-      rf_n_estimators: rfNEstimators,
-      rf_max_depth: rfMaxDepth,
-      rf_min_samples_split: rfMinSplit
+  try {
+    const datasetModelDir = path.join(MODELS_DIR, datasetId);
+    if (!fs.existsSync(datasetModelDir)) {
+      fs.mkdirSync(datasetModelDir, { recursive: true });
     }
-  };
 
-  fs.writeFileSync(path.join(datasetModelDir, 'metadata.json'), JSON.stringify(modelMetadata, null, 2));
+    fs.writeFileSync(path.join(datasetModelDir, 'scaler.json'), JSON.stringify(scaler, null, 2));
+    fs.writeFileSync(path.join(datasetModelDir, 'linear_regression.json'), JSON.stringify(lrResult.model, null, 2));
+    fs.writeFileSync(path.join(datasetModelDir, 'random_forest.json'), JSON.stringify(rfResult.model, null, 2));
+
+    const modelMetadata = {
+      dataset_id: datasetId,
+      trained_at: new Date().toISOString(),
+      best_model_name: bestModelName,
+      selection_reason: selectionReason,
+      comparisons: modelComparisons,
+      feature_importances: featureImportances,
+      hyperparameters: {
+        lr_lambda: lrLambda,
+        rf_n_estimators: rfNEstimators,
+        rf_max_depth: rfMaxDepth,
+        rf_min_samples_split: rfMinSplit
+      }
+    };
+
+    fs.writeFileSync(path.join(datasetModelDir, 'metadata.json'), JSON.stringify(modelMetadata, null, 2));
+  } catch (e) {
+    console.warn('Skipping disk model saving in client environment:', e);
+  }
 
   return {
     datasetId,
