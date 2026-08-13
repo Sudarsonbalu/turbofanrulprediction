@@ -45,8 +45,8 @@ export const CMAPSS_COLUMNS = [
 /**
  * Parses raw file content into normalized tabular rows.
  */
-export function parseDatasetFile(fileBuffer: Buffer, filename: string): ParseResult {
-  let content = fileBuffer.toString('utf-8');
+export function parseDatasetFile(fileBuffer: Buffer | string, filename: string): ParseResult {
+  let content = typeof fileBuffer === 'string' ? fileBuffer : fileBuffer.toString('utf-8');
 
   // Strip UTF-8 BOM if present
   if (content.charCodeAt(0) === 0xFEFF) {
