@@ -2,18 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "server.ts",
+      "src": "api/index.ts",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server.ts"
+      "dest": "api/index.ts"
     },
     {
       "src": "/google14a3ff345c9b5db9.html",
-      "dest": "server.ts"
+      "dest": "api/index.ts"
     },
     {
       "src": "/(.*)",
