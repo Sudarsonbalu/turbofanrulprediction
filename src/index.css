@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  
+  --color-ink: #16191C;
+  --color-ink-muted: #5A594F;
+  --color-paper: #FAF9F6;
+  --color-panel: #FFFFFF;
+  --color-border: #DDD8D3;
+  --color-sidebar: #14171A;
+  --color-critical: #A6362A;
+  --color-warning: #B8791A;
+  --color-healthy: #2F6E5C;
+}
+
+:root {
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #16191C;
+  background-color: #FAF9F6;
+}
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background-color: #FAF9F6;
+  color: #16191C;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-mono-data {
+  font-family: 'IBM Plex Mono', monospace !important;
+}
+
+.font-sans-ui {
+  font-family: 'IBM Plex Sans', sans-serif !important;
+}
+
+/* Instrumentation border & panel rules */
+.instrument-panel {
+  background-color: #FFFFFF;
+  border: 1px solid #DDD8D3;
+  border-radius: 2px;
+  box-shadow: none !important;
+}
+
+.instrument-panel-sm {
+  background-color: #FFFFFF;
+  border: 1px solid #DDD8D3;
+  border-radius: 2px;
+  box-shadow: none !important;
+}
+
+.border-hairline {
+  border-color: #DDD8D3;
+}
+
+/* Custom scrollbars for telemetry data tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF9F6;
+  border-left: 1px solid #DDD8D3;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DDD8D3;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5A594F;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "NASA Turbofan Research Portal",
+  "description": "National Aeronautics and Space Administration - Propulsion Systems Division. NASA C-MAPSS Turbofan Engine Health Monitoring & Predictive Maintenance Portal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
