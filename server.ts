@@ -48,6 +48,11 @@ async function startServer() {
     res.json({ status: 'ok', service: 'TurbofanAI Platform', phase: 2 });
   });
 
+  // Google Search Console Verification Endpoint
+  app.get('/google14a3ff345c9b5db9.html', (req: Request, res: Response) => {
+    res.type('html').send('google-site-verification: google14a3ff345c9b5db9.html');
+  });
+
   // Ensure initial sample dataset is loaded
   try {
     ensureSampleDatasetExists();
