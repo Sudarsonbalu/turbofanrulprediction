@@ -1,39 +1,41 @@
 import { HermesStatusResponse, HermesChatResponse } from '../../backend/app/hermes/schemas';
+import { executeClientHermesTask, getClientHermesStatus } from './clientHermesService';
 
 export async function fetchHermesStatus(): Promise<HermesStatusResponse> {
   try {
     const response = await fetch('/api/hermes/health');
-    if (!response.ok) {
-      return {
-        status: 'OFFLINE',
-        enabled: true,
-        provider: 'Nous Portal',
-        model: 'upstage/solar-pro4',
-        message: 'Failed to connect to Hermes health check endpoint.',
-        base_url: 'http://127.0.0.1:8650/v1',
-        capabilities: []
-      };
+    if (response.ok) {
+      const data = await response.json();
+      if (data && data.status && data.status !== 'OFFLINE') {
+        return data;
+      }
     }
-    return response.json();
   } catch {
-    return {
-      status: 'OFFLINE',
-      enabled: true,
-      provider: 'Nous Portal',
-      model: 'upstage/solar-pro4',
-      message: 'Hermes API service unreachable.',
-      base_url: 'http://127.0.0.1:8650/v1',
-      capabilities: []
-    };
+    // ignore
   }
+
+  return getClientHermesStatus();
 }
 
 export async function fetchHermesCapabilities(): Promise<any> {
-  const response = await fetch('/api/hermes/capabilities');
-  if (!response.ok) {
-    throw new Error('Failed to fetch Hermes capabilities.');
+  try {
+    const response = await fetch('/api/hermes/capabilities');
+    if (response.ok) {
+      return await response.json();
+    }
+  } catch {
+    // ignore
   }
-  return response.json();
+
+  return {
+    read_only_tools: [
+      { name: 'get_dataset_summary', description: 'Retrieve high-level statistical summary' },
+      { name: 'get_engine_details', description: 'Retrieve detailed telemetry trajectories for a specific engine' },
+      { name: 'get_sensor_analytics', description: 'Retrieve sensor correlation and variance statistics' },
+      { name: 'compare_engines', description: 'Rank fleet engines by predicted remaining useful life' }
+    ],
+    access_level: 'READ_ONLY_ENGINEERING_INTELLIGENCE'
+  };
 }
 
 export async function sendHermesTask(
@@ -42,54 +44,65 @@ export async function sendHermesTask(
   datasetId?: string,
   engineId?: number
 ): Promise<HermesChatResponse> {
-  const response = await fetch('/api/hermes/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message,
-      conversation_id: conversationId,
-      dataset_id: datasetId,
-      engine_id: engineId
-    })
-  });
+  try {
+    const response = await fetch('/api/hermes/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message,
+        conversation_id: conversationId,
+        dataset_id: datasetId,
+        engine_id: engineId
+      })
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.error || 'AI service is temporarily unavailable. Please try again.');
+    if (response.ok) {
+      return await response.json();
+    }
+  } catch {
+    // ignore
   }
 
-  return response.json();
+  return executeClientHermesTask(message, conversationId, datasetId || 'train_FD001.txt', engineId);
 }
 
 export async function analyzeEngineWithHermes(
   datasetId: string,
   engineId: number
 ): Promise<HermesChatResponse> {
-  const response = await fetch('/api/hermes/analyze-engine', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ dataset_id: datasetId, engine_id: engineId })
-  });
+  try {
+    const response = await fetch('/api/hermes/analyze-engine', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dataset_id: datasetId, engine_id: engineId })
+    });
 
-  if (!response.ok) {
-    throw new Error(`Failed to analyze Engine #${engineId} with Hermes.`);
+    if (response.ok) {
+      return await response.json();
+    }
+  } catch {
+    // ignore
   }
 
-  return response.json();
+  return executeClientHermesTask(`Analyze Engine #${engineId} in detail. Evaluate degradation, predicted RUL, and key sensor trends.`, undefined, datasetId, engineId);
 }
 
 export async function compareEnginesWithHermes(
   datasetId: string
 ): Promise<HermesChatResponse> {
-  const response = await fetch('/api/hermes/compare-engines', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ dataset_id: datasetId })
-  });
+  try {
+    const response = await fetch('/api/hermes/compare-engines', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dataset_id: datasetId })
+    });
 
-  if (!response.ok) {
-    throw new Error('Failed to compare engines with Hermes.');
+    if (response.ok) {
+      return await response.json();
+    }
+  } catch {
+    // ignore
   }
 
-  return response.json();
+  return executeClientHermesTask('Rank and compare all engines by lowest predicted RUL. Highlight critical risk units.', undefined, datasetId);
 }
