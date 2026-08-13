@@ -57,10 +57,13 @@ export async function sendHermesTask(
     });
 
     if (response.ok) {
-      return await response.json();
+      const data = await response.json();
+      if (data && data.response) {
+        return data;
+      }
     }
-  } catch {
-    // ignore
+  } catch (e) {
+    console.warn('Hermes server endpoint error, falling back to client engineering runner:', e);
   }
 
   return executeClientHermesTask(message, conversationId, datasetId || 'train_FD001.txt', engineId);
@@ -78,7 +81,10 @@ export async function analyzeEngineWithHermes(
     });
 
     if (response.ok) {
-      return await response.json();
+      const data = await response.json();
+      if (data && data.response) {
+        return data;
+      }
     }
   } catch {
     // ignore
@@ -98,7 +104,10 @@ export async function compareEnginesWithHermes(
     });
 
     if (response.ok) {
-      return await response.json();
+      const data = await response.json();
+      if (data && data.response) {
+        return data;
+      }
     }
   } catch {
     // ignore

@@ -246,10 +246,54 @@ export function getDatasetColumnProfiles(datasetId: string): ColumnProfile[] | n
 }
 
 export function deleteDataset(datasetId: string): boolean {
-  const datasetFolder = path.join(UPLOADS_DIR, datasetId);
-  if (fs.existsSync(datasetFolder)) {
-    fs.rmSync(datasetFolder, { recursive: true, force: true });
-    return true;
+  let deleted = false;
+
+  // 1. Remove Uploads Directory
+  const uploadPaths = [
+    path.join(UPLOADS_DIR, datasetId),
+    path.join(process.cwd(), 'uploads', datasetId),
+    path.join('/tmp', 'uploads', datasetId)
+  ];
+  for (const p of uploadPaths) {
+    if (fs.existsSync(p)) {
+      try {
+        fs.rmSync(p, { recursive: true, force: true });
+        deleted = true;
+      } catch (e) {
+        console.error(`Failed to delete upload folder ${p}:`, e);
+      }
+    }
   }
-  return false;
+
+  // 2. Remove Processed Analysis & Predictions Directory
+  const processedPaths = [
+    path.join(process.cwd(), 'processed', datasetId),
+    path.join('/tmp', 'processed', datasetId)
+  ];
+  for (const p of processedPaths) {
+    if (fs.existsSync(p)) {
+      try {
+        fs.rmSync(p, { recursive: true, force: true });
+      } catch (e) {
+        console.error(`Failed to delete processed folder ${p}:`, e);
+      }
+    }
+  }
+
+  // 3. Remove Models Directory
+  const modelPaths = [
+    path.join(process.cwd(), 'models', datasetId),
+    path.join('/tmp', 'models', datasetId)
+  ];
+  for (const p of modelPaths) {
+    if (fs.existsSync(p)) {
+      try {
+        fs.rmSync(p, { recursive: true, force: true });
+      } catch (e) {
+        console.error(`Failed to delete model folder ${p}:`, e);
+      }
+    }
+  }
+
+  return deleted;
 }

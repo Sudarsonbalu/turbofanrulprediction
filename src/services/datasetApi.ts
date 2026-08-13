@@ -3,7 +3,8 @@ import {
   processClientDatasetUpload,
   generateClientSampleDataset,
   getClientDatasetMetadata,
-  getClientDatasetPreview
+  getClientDatasetPreview,
+  deleteClientDataset
 } from './clientDatasetService';
 
 export async function uploadDatasetFile(file: File): Promise<DatasetMetadata> {
@@ -123,6 +124,7 @@ export async function fetchDatasetColumns(datasetId: string): Promise<ColumnProf
 }
 
 export async function deleteUploadedDataset(datasetId: string): Promise<void> {
+  deleteClientDataset(datasetId);
   try {
     await fetch(`/api/dataset/${datasetId}`, {
       method: 'DELETE'

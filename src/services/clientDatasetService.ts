@@ -473,3 +473,9 @@ export function getClientFeatureImportance(datasetId: string): FeatureImportance
   }
   return clientPredictionCache.get(datasetId)?.response.feature_importance || [];
 }
+
+export function deleteClientDataset(datasetId: string): void {
+  clientDatasets.delete(datasetId);
+  clientAnalysisCache.delete(datasetId);
+  clientPredictionCache.delete(datasetId);
+}
