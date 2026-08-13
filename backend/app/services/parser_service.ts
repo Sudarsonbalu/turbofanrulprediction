@@ -46,7 +46,14 @@ export const CMAPSS_COLUMNS = [
  * Parses raw file content into normalized tabular rows.
  */
 export function parseDatasetFile(fileBuffer: Buffer, filename: string): ParseResult {
-  const content = fileBuffer.toString('utf-8');
+  let content = fileBuffer.toString('utf-8');
+
+  // Strip UTF-8 BOM if present
+  if (content.charCodeAt(0) === 0xFEFF) {
+    content = content.slice(1);
+  }
+  content = content.replace(/^\uFEFF/, '');
+
   const lines = content.split(/\r?\n/).filter(line => line.trim().length > 0);
 
   if (lines.length === 0) {
@@ -89,7 +96,7 @@ function parseCsvContent(lines: string[]): ParseResult {
   }
 
   // Identify Engine column
-  const engineColCandidates = ['engine_id', 'engine', 'unit', 'unit_id', 'id', 'unit_number'];
+  const engineColCandidates = ['engine_id', 'engine', 'unit', 'unit_id', 'id', 'unit_number', 'unit_nr', 'engine_number', 'eng_id', 'eng'];
   let engineColName: string | null = null;
   for (const col of headerTokens) {
     const colLower = col.toLowerCase();
@@ -100,7 +107,7 @@ function parseCsvContent(lines: string[]): ParseResult {
   }
 
   // Identify Cycle column
-  const cycleColCandidates = ['cycle', 'operating_cycle', 'time', 'time_in_cycles', 'step'];
+  const cycleColCandidates = ['cycle', 'operating_cycle', 'time', 'time_in_cycles', 'cycles', 'step', 'time_cycle', 'time_in_cycle', 't', 'cyc'];
   let cycleColName: string | null = null;
   for (const col of headerTokens) {
     const colLower = col.toLowerCase();
@@ -110,18 +117,9 @@ function parseCsvContent(lines: string[]): ParseResult {
     }
   }
 
-  if (!engineColName || !cycleColName) {
-    return {
-      format: 'CSV',
-      columns: headerTokens,
-      rows: [],
-      engineColName,
-      cycleColName,
-      sensorColNames: [],
-      settingColNames: [],
-      error: 'Unable to identify the required engine and cycle columns.'
-    };
-  }
+  // Fallback: If candidates aren't named explicitly, assign column 0 as engine and column 1 as cycle
+  if (!engineColName) engineColName = headerTokens[0];
+  if (!cycleColName) cycleColName = headerTokens[1] || headerTokens[0];
 
   const sensorColNames: string[] = [];
   const settingColNames: string[] = [];
@@ -166,17 +164,17 @@ function parseCsvContent(lines: string[]): ParseResult {
 function parseTxtContent(lines: string[], filename: string): ParseResult {
   const isRulFile = filename.toLowerCase().startsWith('rul_') || filename.toLowerCase().includes('rul');
 
-  // Check line structure
-  const sampleLineTokens = lines[0].trim().split(/\s+/);
+  // Check line structure (splits space, tab, comma, semicolon)
+  const sampleLineTokens = lines[0].trim().split(/[\s,\t;]+/);
 
   if (isRulFile || sampleLineTokens.length === 1) {
     // NASA C-MAPSS RUL File (Contains single ground truth RUL value per engine or engine_id + RUL)
     const rows: ParsedRow[] = [];
     const isSingleVal = sampleLineTokens.length === 1;
-    const columns = isSingleVal ? ['engine_id', 'rul'] : ['engine_id', 'rul'];
+    const columns = ['engine_id', 'rul'];
 
     lines.forEach((line, index) => {
-      const tokens = line.trim().split(/\s+/);
+      const tokens = line.trim().split(/[\s,\t;]+/);
       if (tokens.length === 0 || !tokens[0]) return;
       if (isSingleVal) {
         const rul = Number(tokens[0]);
@@ -210,7 +208,7 @@ function parseTxtContent(lines: string[], filename: string): ParseResult {
   const rows: ParsedRow[] = [];
 
   for (let i = 0; i < lines.length; i++) {
-    const tokens = lines[i].trim().split(/\s+/);
+    const tokens = lines[i].trim().split(/[\s,\t;]+/);
     if (tokens.length < 2) continue; // Skip malformed lines
 
     const rowObj: ParsedRow = {};

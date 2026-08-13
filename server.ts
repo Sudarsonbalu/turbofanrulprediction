@@ -78,19 +78,26 @@ async function startServer() {
   // Upload dataset
   app.post('/api/dataset/upload', upload.single('file'), (req: Request, res: Response) => {
     try {
-      if (!req.file) {
-        const altFile = req.file;
-        if (!altFile) {
-          return res.status(400).json({ error: 'No dataset file attached. Please select a .txt or .csv file.' });
-        }
+      let fileBuffer: Buffer | null = null;
+      let filename = 'uploaded_dataset.txt';
+
+      if (req.file) {
+        fileBuffer = req.file.buffer;
+        filename = req.file.originalname || filename;
+      } else if (req.body && Buffer.isBuffer(req.body)) {
+        fileBuffer = req.body;
+      } else if (req.body && typeof req.body === 'string') {
+        fileBuffer = Buffer.from(req.body, 'utf-8');
       }
 
-      const file = req.file!;
-      if (file.size === 0) {
-        return res.status(400).json({ error: 'Uploaded file is empty (0 bytes).' });
+      if (!fileBuffer || fileBuffer.length === 0) {
+        return res.status(400).json({
+          error: 'No valid dataset file attached.',
+          details: 'Please select a valid .txt or .csv dataset file.'
+        });
       }
 
-      const metadata = saveUploadedDataset(file.buffer, file.originalname);
+      const metadata = saveUploadedDataset(fileBuffer, filename);
       return res.status(201).json(metadata);
     } catch (err: any) {
       console.error('Error during dataset upload:', err);

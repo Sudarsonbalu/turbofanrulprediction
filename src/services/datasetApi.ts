@@ -13,7 +13,7 @@ export async function uploadDatasetFile(file: File): Promise<DatasetMetadata> {
     let errMsg = 'Failed to upload dataset file.';
     try {
       const errData = await response.json();
-      errMsg = errData.error || errData.message || errMsg;
+      errMsg = errData.details || errData.error || errData.message || errMsg;
     } catch {
       // ignore
     }

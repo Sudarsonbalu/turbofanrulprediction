@@ -1,0 +1,229 @@
+{
+  "dataset_id": "dataset_2498d555ae303d3f",
+  "trained_at": "2026-08-13T07:50:38.743Z",
+  "best_model_name": "Random Forest",
+  "selection_reason": "Selected 'Random Forest' based on lower validation MAE (33.84 vs 35.56 cycles).",
+  "comparisons": [
+    {
+      "model_name": "Linear Regression",
+      "metrics": {
+        "mae": 35.56,
+        "rmse": 44.95,
+        "r2": 0.6352,
+        "training_time_ms": 636
+      },
+      "is_best": false
+    },
+    {
+      "model_name": "Random Forest",
+      "metrics": {
+        "mae": 33.84,
+        "rmse": 42.94,
+        "r2": 0.6671,
+        "training_time_ms": 4992
+      },
+      "is_best": true,
+      "selection_reason": "Selected 'Random Forest' based on lower validation MAE (33.84 vs 35.56 cycles)."
+    }
+  ],
+  "feature_importances": [
+    {
+      "feature": "sensor_20_roll_mean",
+      "importance": 0.245
+    },
+    {
+      "feature": "sensor_21_roll_mean",
+      "importance": 0.1153
+    },
+    {
+      "feature": "sensor_21_raw",
+      "importance": 0.1095
+    },
+    {
+      "feature": "sensor_20_raw",
+      "importance": 0.1006
+    },
+    {
+      "feature": "sensor_2_roll_mean",
+      "importance": 0.0889
+    },
+    {
+      "feature": "sensor_7_roll_mean",
+      "importance": 0.0694
+    },
+    {
+      "feature": "sensor_4_roll_mean",
+      "importance": 0.0643
+    },
+    {
+      "feature": "sensor_4_raw",
+      "importance": 0.0546
+    },
+    {
+      "feature": "sensor_7_raw",
+      "importance": 0.0527
+    },
+    {
+      "feature": "sensor_12_roll_mean",
+      "importance": 0.0263
+    },
+    {
+      "feature": "sensor_11_roll_mean",
+      "importance": 0.0192
+    },
+    {
+      "feature": "sensor_3_roll_mean",
+      "importance": 0.0095
+    },
+    {
+      "feature": "sensor_2_raw",
+      "importance": 0.0081
+    },
+    {
+      "feature": "sensor_8_roll_mean",
+      "importance": 0.0073
+    },
+    {
+      "feature": "sensor_15_roll_mean",
+      "importance": 0.0041
+    },
+    {
+      "feature": "sensor_17_roll_mean",
+      "importance": 0.0024
+    },
+    {
+      "feature": "sensor_13_raw",
+      "importance": 0.0016
+    },
+    {
+      "feature": "sensor_8_roll_std",
+      "importance": 0.0013
+    },
+    {
+      "feature": "sensor_12_raw",
+      "importance": 0.0013
+    },
+    {
+      "feature": "sensor_14_roll_mean",
+      "importance": 0.0013
+    },
+    {
+      "feature": "sensor_11_raw",
+      "importance": 0.0011
+    },
+    {
+      "feature": "sensor_13_roll_mean",
+      "importance": 0.0011
+    },
+    {
+      "feature": "sensor_2_roll_std",
+      "importance": 0.0009
+    },
+    {
+      "feature": "sensor_7_roll_std",
+      "importance": 0.0009
+    },
+    {
+      "feature": "setting_1_roll_mean",
+      "importance": 0.0008
+    },
+    {
+      "feature": "setting_2_roll_std",
+      "importance": 0.0008
+    },
+    {
+      "feature": "sensor_3_roll_std",
+      "importance": 0.0008
+    },
+    {
+      "feature": "sensor_4_roll_std",
+      "importance": 0.0008
+    },
+    {
+      "feature": "sensor_9_roll_std",
+      "importance": 0.0008
+    },
+    {
+      "feature": "sensor_11_roll_std",
+      "importance": 0.0008
+    },
+    {
+      "feature": "setting_1_roll_std",
+      "importance": 0.0007
+    },
+    {
+      "feature": "sensor_21_roll_std",
+      "importance": 0.0007
+    },
+    {
+      "feature": "setting_2_roll_mean",
+      "importance": 0.0006
+    },
+    {
+      "feature": "sensor_12_roll_std",
+      "importance": 0.0006
+    },
+    {
+      "feature": "sensor_13_roll_std",
+      "importance": 0.0006
+    },
+    {
+      "feature": "sensor_15_raw",
+      "importance": 0.0006
+    },
+    {
+      "feature": "sensor_15_roll_std",
+      "importance": 0.0006
+    },
+    {
+      "feature": "sensor_3_raw",
+      "importance": 0.0005
+    },
+    {
+      "feature": "sensor_14_roll_std",
+      "importance": 0.0005
+    },
+    {
+      "feature": "sensor_20_roll_std",
+      "importance": 0.0005
+    },
+    {
+      "feature": "setting_1_raw",
+      "importance": 0.0004
+    },
+    {
+      "feature": "sensor_8_raw",
+      "importance": 0.0004
+    },
+    {
+      "feature": "sensor_9_raw",
+      "importance": 0.0004
+    },
+    {
+      "feature": "sensor_9_roll_mean",
+      "importance": 0.0004
+    },
+    {
+      "feature": "sensor_14_raw",
+      "importance": 0.0004
+    },
+    {
+      "feature": "setting_2_raw",
+      "importance": 0.0002
+    },
+    {
+      "feature": "sensor_17_roll_std",
+      "importance": 0.0002
+    },
+    {
+      "feature": "sensor_17_raw",
+      "importance": 0.0001
+    }
+  ],
+  "hyperparameters": {
+    "lr_lambda": 0.1,
+    "rf_n_estimators": 15,
+    "rf_max_depth": 8,
+    "rf_min_samples_split": 5
+  }
+}

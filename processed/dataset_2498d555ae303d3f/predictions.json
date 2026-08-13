@@ -1,0 +1,1019 @@
+{
+  "dataset_id": "dataset_2498d555ae303d3f",
+  "model_used": "Random Forest",
+  "selection_reason": "Selected 'Random Forest' based on lower validation MAE (33.84 vs 35.56 cycles).",
+  "metrics": {
+    "mae": 2.61,
+    "rmse": 2.66,
+    "r2": 0,
+    "training_time_ms": 0
+  },
+  "thresholds": {
+    "critical_threshold": 30,
+    "warning_threshold": 70
+  },
+  "summary": {
+    "total_engines": 100,
+    "avg_predicted_rul": 3,
+    "min_predicted_rul": 2,
+    "critical_count": 100,
+    "warning_count": 0,
+    "healthy_count": 0
+  },
+  "predictions": [
+    {
+      "engine_id": 1,
+      "current_cycle": 314,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 3,
+      "current_cycle": 273,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 5,
+      "current_cycle": 247,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 8,
+      "current_cycle": 291,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 10,
+      "current_cycle": 324,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 11,
+      "current_cycle": 243,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 12,
+      "current_cycle": 201,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 14,
+      "current_cycle": 246,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 17,
+      "current_cycle": 307,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 20,
+      "current_cycle": 246,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 21,
+      "current_cycle": 204,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 23,
+      "current_cycle": 144,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 24,
+      "current_cycle": 286,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 25,
+      "current_cycle": 169,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 28,
+      "current_cycle": 237,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 29,
+      "current_cycle": 164,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 33,
+      "current_cycle": 169,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 34,
+      "current_cycle": 297,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 36,
+      "current_cycle": 212,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 39,
+      "current_cycle": 244,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 41,
+      "current_cycle": 297,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 42,
+      "current_cycle": 337,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 46,
+      "current_cycle": 304,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 47,
+      "current_cycle": 138,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 48,
+      "current_cycle": 237,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 51,
+      "current_cycle": 265,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 54,
+      "current_cycle": 237,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 55,
+      "current_cycle": 299,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 56,
+      "current_cycle": 334,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 57,
+      "current_cycle": 326,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 59,
+      "current_cycle": 187,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 60,
+      "current_cycle": 269,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 67,
+      "current_cycle": 125,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 70,
+      "current_cycle": 210,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 71,
+      "current_cycle": 271,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 73,
+      "current_cycle": 173,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 75,
+      "current_cycle": 251,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 76,
+      "current_cycle": 272,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 80,
+      "current_cycle": 201,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 82,
+      "current_cycle": 173,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 83,
+      "current_cycle": 311,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 84,
+      "current_cycle": 140,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 85,
+      "current_cycle": 218,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 88,
+      "current_cycle": 180,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 89,
+      "current_cycle": 195,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 91,
+      "current_cycle": 223,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 93,
+      "current_cycle": 201,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 96,
+      "current_cycle": 145,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 97,
+      "current_cycle": 126,
+      "predicted_rul": 2,
+      "actual_rul": 0,
+      "absolute_error": 2,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 2,
+      "current_cycle": 160,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 4,
+      "current_cycle": 132,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 7,
+      "current_cycle": 218,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 9,
+      "current_cycle": 132,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 13,
+      "current_cycle": 157,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 15,
+      "current_cycle": 169,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 16,
+      "current_cycle": 165,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 18,
+      "current_cycle": 316,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 19,
+      "current_cycle": 235,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 22,
+      "current_cycle": 266,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 26,
+      "current_cycle": 245,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 27,
+      "current_cycle": 188,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 30,
+      "current_cycle": 217,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 31,
+      "current_cycle": 130,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 35,
+      "current_cycle": 259,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 37,
+      "current_cycle": 207,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 38,
+      "current_cycle": 249,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 43,
+      "current_cycle": 145,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 45,
+      "current_cycle": 180,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 49,
+      "current_cycle": 200,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 50,
+      "current_cycle": 156,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 52,
+      "current_cycle": 290,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 53,
+      "current_cycle": 329,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 58,
+      "current_cycle": 250,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 61,
+      "current_cycle": 302,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 62,
+      "current_cycle": 208,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 63,
+      "current_cycle": 250,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 64,
+      "current_cycle": 188,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 65,
+      "current_cycle": 128,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 66,
+      "current_cycle": 207,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 68,
+      "current_cycle": 254,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 69,
+      "current_cycle": 214,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 72,
+      "current_cycle": 157,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 74,
+      "current_cycle": 229,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 77,
+      "current_cycle": 234,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 78,
+      "current_cycle": 253,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 79,
+      "current_cycle": 338,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 81,
+      "current_cycle": 210,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 90,
+      "current_cycle": 274,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 92,
+      "current_cycle": 194,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 94,
+      "current_cycle": 171,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 99,
+      "current_cycle": 328,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 100,
+      "current_cycle": 169,
+      "predicted_rul": 3,
+      "actual_rul": 0,
+      "absolute_error": 3,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 6,
+      "current_cycle": 272,
+      "predicted_rul": 4,
+      "actual_rul": 0,
+      "absolute_error": 4,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 32,
+      "current_cycle": 153,
+      "predicted_rul": 4,
+      "actual_rul": 0,
+      "absolute_error": 4,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 40,
+      "current_cycle": 212,
+      "predicted_rul": 4,
+      "actual_rul": 0,
+      "absolute_error": 4,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 44,
+      "current_cycle": 125,
+      "predicted_rul": 4,
+      "actual_rul": 0,
+      "absolute_error": 4,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 86,
+      "current_cycle": 126,
+      "predicted_rul": 4,
+      "actual_rul": 0,
+      "absolute_error": 4,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 87,
+      "current_cycle": 131,
+      "predicted_rul": 4,
+      "actual_rul": 0,
+      "absolute_error": 4,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 95,
+      "current_cycle": 322,
+      "predicted_rul": 4,
+      "actual_rul": 0,
+      "absolute_error": 4,
+      "risk_level": "CRITICAL"
+    },
+    {
+      "engine_id": 98,
+      "current_cycle": 124,
+      "predicted_rul": 4,
+      "actual_rul": 0,
+      "absolute_error": 4,
+      "risk_level": "CRITICAL"
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "sensor_20_roll_mean",
+      "importance": 0.245
+    },
+    {
+      "feature": "sensor_21_roll_mean",
+      "importance": 0.1153
+    },
+    {
+      "feature": "sensor_21_raw",
+      "importance": 0.1095
+    },
+    {
+      "feature": "sensor_20_raw",
+      "importance": 0.1006
+    },
+    {
+      "feature": "sensor_2_roll_mean",
+      "importance": 0.0889
+    },
+    {
+      "feature": "sensor_7_roll_mean",
+      "importance": 0.0694
+    },
+    {
+      "feature": "sensor_4_roll_mean",
+      "importance": 0.0643
+    },
+    {
+      "feature": "sensor_4_raw",
+      "importance": 0.0546
+    },
+    {
+      "feature": "sensor_7_raw",
+      "importance": 0.0527
+    },
+    {
+      "feature": "sensor_12_roll_mean",
+      "importance": 0.0263
+    },
+    {
+      "feature": "sensor_11_roll_mean",
+      "importance": 0.0192
+    },
+    {
+      "feature": "sensor_3_roll_mean",
+      "importance": 0.0095
+    },
+    {
+      "feature": "sensor_2_raw",
+      "importance": 0.0081
+    },
+    {
+      "feature": "sensor_8_roll_mean",
+      "importance": 0.0073
+    },
+    {
+      "feature": "sensor_15_roll_mean",
+      "importance": 0.0041
+    },
+    {
+      "feature": "sensor_17_roll_mean",
+      "importance": 0.0024
+    },
+    {
+      "feature": "sensor_13_raw",
+      "importance": 0.0016
+    },
+    {
+      "feature": "sensor_8_roll_std",
+      "importance": 0.0013
+    },
+    {
+      "feature": "sensor_12_raw",
+      "importance": 0.0013
+    },
+    {
+      "feature": "sensor_14_roll_mean",
+      "importance": 0.0013
+    },
+    {
+      "feature": "sensor_11_raw",
+      "importance": 0.0011
+    },
+    {
+      "feature": "sensor_13_roll_mean",
+      "importance": 0.0011
+    },
+    {
+      "feature": "sensor_2_roll_std",
+      "importance": 0.0009
+    },
+    {
+      "feature": "sensor_7_roll_std",
+      "importance": 0.0009
+    },
+    {
+      "feature": "setting_1_roll_mean",
+      "importance": 0.0008
+    },
+    {
+      "feature": "setting_2_roll_std",
+      "importance": 0.0008
+    },
+    {
+      "feature": "sensor_3_roll_std",
+      "importance": 0.0008
+    },
+    {
+      "feature": "sensor_4_roll_std",
+      "importance": 0.0008
+    },
+    {
+      "feature": "sensor_9_roll_std",
+      "importance": 0.0008
+    },
+    {
+      "feature": "sensor_11_roll_std",
+      "importance": 0.0008
+    },
+    {
+      "feature": "setting_1_roll_std",
+      "importance": 0.0007
+    },
+    {
+      "feature": "sensor_21_roll_std",
+      "importance": 0.0007
+    },
+    {
+      "feature": "setting_2_roll_mean",
+      "importance": 0.0006
+    },
+    {
+      "feature": "sensor_12_roll_std",
+      "importance": 0.0006
+    },
+    {
+      "feature": "sensor_13_roll_std",
+      "importance": 0.0006
+    },
+    {
+      "feature": "sensor_15_raw",
+      "importance": 0.0006
+    },
+    {
+      "feature": "sensor_15_roll_std",
+      "importance": 0.0006
+    },
+    {
+      "feature": "sensor_3_raw",
+      "importance": 0.0005
+    },
+    {
+      "feature": "sensor_14_roll_std",
+      "importance": 0.0005
+    },
+    {
+      "feature": "sensor_20_roll_std",
+      "importance": 0.0005
+    },
+    {
+      "feature": "setting_1_raw",
+      "importance": 0.0004
+    },
+    {
+      "feature": "sensor_8_raw",
+      "importance": 0.0004
+    },
+    {
+      "feature": "sensor_9_raw",
+      "importance": 0.0004
+    },
+    {
+      "feature": "sensor_9_roll_mean",
+      "importance": 0.0004
+    },
+    {
+      "feature": "sensor_14_raw",
+      "importance": 0.0004
+    },
+    {
+      "feature": "setting_2_raw",
+      "importance": 0.0002
+    },
+    {
+      "feature": "sensor_17_roll_std",
+      "importance": 0.0002
+    },
+    {
+      "feature": "sensor_17_raw",
+      "importance": 0.0001
+    }
+  ]
+}
